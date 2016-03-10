@@ -18,5 +18,14 @@ public class Mail implements Serializable {
 		timestamp = new Date();
 		hashcash = new byte[4]; // correct hashcash to be set separately
 	}
+	
+	public void setHashcash(byte[] digest){
+		hashcash = new byte[4];
+	}
+	public boolean checkHashcash(byte[] digest){
+		if (digest[0]==0 && digest[1] == 0)
+			return true;
+		else return false;
+	}
 
 }
