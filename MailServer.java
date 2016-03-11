@@ -115,13 +115,7 @@ public class MailServer {
 			timeFresh = true;
 		
 		//final check
-        /*if (sig.verify(signature)&&timeFresh){
-            System.out.println("Client logged in");
-            return true;}
-        else{
-            System.out.println("Client failed to log in");
-            return false;}*/
-        if (sig.verify(signature)){
+                if (sig.verify(signature)){
             System.out.println("signature is right");
             if(timeFresh){
                System.out.println("timespan is fresh");	
