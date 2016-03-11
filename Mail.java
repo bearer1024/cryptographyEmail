@@ -22,6 +22,8 @@ public class Mail implements Serializable {
 	
 	public void setHashcash(byte[] digest){
 		this.hashcash = new byte[4];
+		
+		
 		//this.hashcash += ;
 	}
 	public boolean checkHashcash(byte[] digest){

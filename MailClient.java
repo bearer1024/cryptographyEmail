@@ -82,11 +82,11 @@ public class MailClient {
 						System.out.println(ma.sender);
 						System.out.println(ma.timestamp);
 						System.out.println(ma.message);
+						
 						ByteBuffer bf1 = ByteBuffer.allocate(8);
 						bf1.putLong(ma.timestamp.getTime());
 						MessageDigest md = MessageDigest.getInstance("SHA-1");
 						md.update(ma.recipient.getBytes());
-						
 						md.update(bf1.array());
 						md.update(ma.hashcash);
 												
@@ -98,7 +98,10 @@ public class MailClient {
 						//receive mail
 							System.out.println(ma.message);
 							}
-						else{System.out.println("it's a spam message.");
+						else{
+							System.out.println(digest[0]);
+							System.out.println(digest[1]);
+							System.out.println("it's a spam message.");
 							System.out.println(ma.message);
 							}
 						//msg.remove(0);
@@ -133,20 +136,24 @@ public class MailClient {
 				md.update(m.hashcash);
 				byte[] digest = md.digest();
 				
-				while(!m.checkHashcash(digest)){
+				boolean digest0and1IS0 = false;
+				digest0and1IS0 = m.checkHashcash(digest);
+				while(!digest0and1IS0){
 					m.setHashcash(digest);
+					//bf.putLong(m.timestamp.getTime());//store sender's timeStamp
+					MessageDigest md2 = MessageDigest.getInstance("SHA-1");
+					md2.update(m.recipient.getBytes());
+					md2.update(bf.array());
+					md2.update(m.hashcash);
+					digest = md2.digest();
 					break;
 					
 				}
-				System.out.println("digest[0] is equal now");
+				System.out.println("digest[0] and digest[1] is equal now");
 
 
 				oos.writeObject(m);		
 				}
-	/*		else{
-				System.out.println("failed to login");
-			}
 
-	}*/
 
 }
