@@ -82,44 +82,29 @@ public class MailClient {
 						System.out.println(ma.sender);
 						System.out.println(ma.timestamp);
 						System.out.println(ma.message);
+						ByteBuffer bf1 = ByteBuffer.allocate(8);
+						bf1.putLong(ma.timestamp.getTime());
 						MessageDigest md = MessageDigest.getInstance("SHA-1");
-						md.update(msg.get(0).hashcash);
+						md.update(ma.recipient.getBytes());
+						
+						md.update(bf1.array());
+						md.update(ma.hashcash);
+												
 						
 						byte[] digest = md.digest();
-						boolean normalMail = msg.get(0).checkHashcash(digest);
+						boolean normalMail = ma.checkHashcash(digest);
 						if(normalMail){
 						//check each mail is belongs to SPAM or not
 						//receive mail
-							System.out.println(msg.get(0).message);
+							System.out.println(ma.message);
 							}
 						else{System.out.println("it's a spam message.");
-							System.out.println(msg.get(0).message);
+							System.out.println(ma.message);
 							}
-						msg.remove(0);
+						//msg.remove(0);
 					}
 				}
-				/*while(!msg.isEmpty()){
-					System.out.println("position4");
-					//for each mail, display sender,timeStamp,message
-					System.out.println(msg.get(0).sender);
-					System.out.println(msg.get(0).timestamp);
-					System.out.println(msg.get(0).message);
-					MessageDigest md = MessageDigest.getInstance("SHA-1");
-					md.update(msg.get(0).hashcash);
-					
-					byte[] digest = md.digest();
-					boolean normalMail = msg.get(0).checkHashcash(digest);
-					if(normalMail){
-					//check each mail is belongs to SPAM or not
-					//receive mail
-						System.out.println(msg.get(0).message);
-						}
-					else{System.out.println("it's a spam message.");
-						System.out.println(msg.get(0).message);
-						}
-					msg.remove(0);
-				}*/
-	
+				
 				
 				// send messages
 				System.out.println("Do you want to send a message [Y/N]?");
@@ -154,21 +139,14 @@ public class MailClient {
 					
 				}
 				System.out.println("digest[0] is equal now");
-				/*dos.write(digest);
-				dos.flush();
-				// send timeStamp and digest to server
-				long mailTimestamp = m.timestamp.getTime();
-				dos.writeLong(mailTimestamp);*/
 
-				oos.writeObject(m);
-				
+
+				oos.writeObject(m);		
 				}
-			else{
+	/*		else{
 				System.out.println("failed to login");
 			}
-			
-			
 
-	}
+	}*/
 
 }
