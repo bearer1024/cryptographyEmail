@@ -28,10 +28,7 @@ public class MailClient {
 		ObjectInputStream ois = new ObjectInputStream(s.getInputStream());
 
 		// TO DO: login
-
-		// these two lines are here just to make the supplied programs run
-		// without crashing.
-		// You may want to change them, and certainly add things after them
+		
 		dos.writeUTF(userid);
 
 		String userPrivateKeyFileName = userid + ".prv";
@@ -76,7 +73,6 @@ public class MailClient {
 			for (int i = 0; i < numMsg; i++) {
 				Mail ma = (Mail) ois.readObject();
 
-				System.out.println("position4");
 				// for each mail, display sender,timeStamp,message
 				System.out.println(ma.sender);
 				System.out.println(ma.timestamp);
@@ -110,8 +106,10 @@ public class MailClient {
 		System.out.println("Do you want to send a message [Y/N]?");
 		String wantToSend = br.readLine();
 		if (!wantToSend.equals("Y")) {
+			if(!wantToSend.equalsIgnoreCase("y")){
 			dos.writeBoolean(false);
 			return;
+			}
 		}
 		dos.writeBoolean(true);
 

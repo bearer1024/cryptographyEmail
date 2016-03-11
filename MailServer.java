@@ -86,7 +86,6 @@ public class MailServer {
         byte[] signature = new byte[length];
         System.out.println("verifying for clientid is:"+userid);
         dis.readFully(signature);
-        System.out.println("Server position2");
         
 		// ByteBuffer to convert to bytes later
 		ByteBuffer bb = ByteBuffer.allocate(16);
