@@ -71,12 +71,34 @@ public class MailClient {
 				System.out.println("You have " + numMsg + " incoming messages.");
 		
 				// TO DO: read messages
-				ArrayList<Mail> msg = new ArrayList<>(numMsg);
+				ArrayList<Mail> msg = new ArrayList<Mail>(numMsg);
 				for(int i=0;i<numMsg;i++){
 					//@Unchecked
-					msg = (ArrayList<Mail>) ois.readObject();
+					//msg = (Mail) ois.readObject();
+					Mail ma = (Mail) ois.readObject();
+					
+						System.out.println("position4");
+						//for each mail, display sender,timeStamp,message
+						System.out.println(ma.sender);
+						System.out.println(ma.timestamp);
+						System.out.println(ma.message);
+						MessageDigest md = MessageDigest.getInstance("SHA-1");
+						md.update(msg.get(0).hashcash);
+						
+						byte[] digest = md.digest();
+						boolean normalMail = msg.get(0).checkHashcash(digest);
+						if(normalMail){
+						//check each mail is belongs to SPAM or not
+						//receive mail
+							System.out.println(msg.get(0).message);
+							}
+						else{System.out.println("it's a spam message.");
+							System.out.println(msg.get(0).message);
+							}
+						msg.remove(0);
+					}
 				}
-				while(!msg.isEmpty()){
+				/*while(!msg.isEmpty()){
 					System.out.println("position4");
 					//for each mail, display sender,timeStamp,message
 					System.out.println(msg.get(0).sender);
@@ -96,8 +118,8 @@ public class MailClient {
 						System.out.println(msg.get(0).message);
 						}
 					msg.remove(0);
-				}
-				
+				}*/
+	
 				
 				// send messages
 				System.out.println("Do you want to send a message [Y/N]?");
@@ -112,27 +134,31 @@ public class MailClient {
 				String recipient = br.readLine();
 				System.out.println("Type your message:");
 				String message = br.readLine();
+				
 		
 				// TO DO: send mail
+		        ByteBuffer bf = ByteBuffer.allocate(8);
 				Mail m = new Mail(userid, recipient, message);
 				//create digest
-				bb.putLong(m.timestamp.getTime());//store sender's timeStamp
+				bf.putLong(m.timestamp.getTime());//store sender's timeStamp
+				
 				MessageDigest md = MessageDigest.getInstance("SHA-1");
 				md.update(m.recipient.getBytes());
-				md.update(bb.array());
+				md.update(bf.array());
 				md.update(m.hashcash);
 				byte[] digest = md.digest();
 				
 				while(!m.checkHashcash(digest)){
 					m.setHashcash(digest);
+					break;
 					
 				}
-				System.out.println("HashCash is equal now");
-				dos.write(digest);
+				System.out.println("digest[0] is equal now");
+				/*dos.write(digest);
 				dos.flush();
 				// send timeStamp and digest to server
 				long mailTimestamp = m.timestamp.getTime();
-				dos.writeLong(mailTimestamp);
+				dos.writeLong(mailTimestamp);*/
 
 				oos.writeObject(m);
 				

@@ -67,7 +67,7 @@ public class MailServer {
 
 			}
 			//ss.close();
-			s.close();
+			//s.close();
 
 		}  // end while
 
